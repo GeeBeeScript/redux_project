@@ -44,6 +44,13 @@ const cartSlice = createSlice({
         //     existingItem.quantity++
         //     existingItem.totalPrice = existingItem.totalPrice + existingItem.price
         // }
+
+        // reducers must be pure, side-effect free and asynchronous function. Side effect
+        // (whether synchronous or asynchronous) code should not go here. When using 
+        // redux, we can execute side-effects inside the components or inside an action
+        // creator. 
+        // If you are working with synchronous, side-effect free code, using reducers may
+        // be a better option, than using action creators or components. 
     }
 })
 
