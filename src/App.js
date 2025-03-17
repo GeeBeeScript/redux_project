@@ -6,7 +6,7 @@ import Notification from "./components/UI/Notification";
 
 import { useSelector, useDispatch } from "react-redux";
 import { mainSliceActions } from "./components/store/main-slice";
-import { sendCartData } from "./components/store/cart-slice";
+import { sendCartData, fetchCartData } from "./components/store/cart-actions";
 
 let isInitial = true
 
@@ -15,6 +15,12 @@ function App() {
   const cart = useSelector((state) => state.cart);
   const notification = useSelector((state) => state.main.notification);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (cart.changed) {
+      dispatch(fetchCartData())
+    }
+  }, [dispatch])
 
   useEffect(() => {
     if (isInitial) {
