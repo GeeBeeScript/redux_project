@@ -7,6 +7,8 @@ import Notification from "./components/UI/Notification";
 import { useSelector, useDispatch } from "react-redux";
 import { mainSliceActions } from "./components/store/main-slice";
 
+let isInitial = true
+
 function App() {
   const showCart = useSelector((state) => state.main.cartIsVisible);
   const cart = useSelector((state) => state.cart);
@@ -24,18 +26,18 @@ function App() {
           message: "Sending cart data",
         })
       );
-      const response = await fetch(
-        "https://react-http-project-71044-default-rtdb.firebaseio.com/cart.json",
-        {
-          method: "PUT",
-          body: JSON.stringify(cart),
-        }
-      );
+      // const response = await fetch(
+      //   "https://react-http-project-71044-default-rtdb.firebaseio.com/cart.json",
+      //   {
+      //     method: "PUT",
+      //     body: JSON.stringify(cart),
+      //   }
+      // );
 
-      if (!response.ok) {
-        throw new Error("There was an error");
-      }
-      const responseData = await response.json();
+      // if (!response.ok) {
+      //   throw new Error("There was an error");
+      // }
+      // const responseData = await response.json();
       dispatch(
         mainSliceActions.setNotification({
           status: "success",
@@ -44,6 +46,11 @@ function App() {
         })
       );
     };
+
+    if (isInitial) {
+      isInitial = false
+      return
+    }
 
     sendCartData().catch((error) => {
       dispatch(
@@ -74,3 +81,9 @@ function App() {
 }
 
 export default App;
+
+// A 'Thunk' is a function that delays an action untill later. We can write an action
+// creator as a Thunk, to ensure the action creator function does not return the 
+// action itself, but another function which eventually returns the action (i.e, so that
+// we can run some other code before we then dispatch the action object that we want to create).
+// 

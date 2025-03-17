@@ -1,5 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 
+import { mainSliceActions } from './main-slice'
+
 const cartSlice = createSlice({
     name: "cart",
     initialState: { 
@@ -53,6 +55,53 @@ const cartSlice = createSlice({
         // be a better option, than using action creators or components. 
     }
 })
+
+// creating a Thunk
+
+const sendCartData = (cart) => {
+    return async (dispatch) => {
+        dispatch(
+            mainSliceActions.setNotification({
+                status: "pending",
+                title: "Sending...",
+                message: "Sending cart data",
+            })
+        )
+        const sendRequest = async () => {
+            const response = await fetch(
+                "https://react-http-project-71044-default-rtdb.firebaseio.com/cart.json",
+                {
+                    method: "PUT",
+                    body: JSON.stringify(cart),
+                }
+            );
+
+            if (!response.ok) {
+                throw new Error("There was an error");
+            }
+        }
+    
+        try {
+            await sendRequest()
+            dispatch(
+                mainSliceActions.setNotification({
+                  status: "success",
+                  title: "Success",
+                  message: "Sent cart data successfully...",
+                })
+            );
+        } catch (error) {
+            dispatch(
+                mainSliceActions.setNotification({
+                  status: "failed",
+                  title: "Failed",
+                  message: "Cart data failed to send",
+                })
+            );
+        }
+
+    }
+}
 
 export const cartSliceActions = cartSlice.actions
 
