@@ -6,6 +6,7 @@ import Notification from "./components/UI/Notification";
 
 import { useSelector, useDispatch } from "react-redux";
 import { mainSliceActions } from "./components/store/main-slice";
+import { sendCartData } from "./components/store/cart-slice";
 
 let isInitial = true
 
@@ -15,52 +16,13 @@ function App() {
   const notification = useSelector((state) => state.main.notification);
   const dispatch = useDispatch();
 
-  // This is not the best, because we will send an empty cart on initial render to the
-  // database
   useEffect(() => {
-    const sendCartData = async () => {
-      dispatch(
-        mainSliceActions.setNotification({
-          status: "pending",
-          title: "Sending...",
-          message: "Sending cart data",
-        })
-      );
-      // const response = await fetch(
-      //   "https://react-http-project-71044-default-rtdb.firebaseio.com/cart.json",
-      //   {
-      //     method: "PUT",
-      //     body: JSON.stringify(cart),
-      //   }
-      // );
-
-      // if (!response.ok) {
-      //   throw new Error("There was an error");
-      // }
-      // const responseData = await response.json();
-      dispatch(
-        mainSliceActions.setNotification({
-          status: "success",
-          title: "Success",
-          message: "Sent cart data successfully...",
-        })
-      );
-    };
-
     if (isInitial) {
       isInitial = false
-      return
+      return 
     }
 
-    sendCartData().catch((error) => {
-      dispatch(
-        mainSliceActions.setNotification({
-          status: "failed",
-          title: "Failed",
-          message: "Cart data failed to send",
-        })
-      );
-    });
+    dispatch(sendCartData(cart))
   }, [cart, dispatch]);
 
   return (

@@ -58,7 +58,7 @@ const cartSlice = createSlice({
 
 // creating a Thunk
 
-const sendCartData = (cart) => {
+export const sendCartData = (cart) => {
     return async (dispatch) => {
         dispatch(
             mainSliceActions.setNotification({
